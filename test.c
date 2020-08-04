@@ -11,15 +11,15 @@ int main(int argc, char **argv)
 
   printf("Private Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)priv->modulus, (long long) priv->exponent);
   printf("Public Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)pub->modulus, (long long) pub->exponent);
-  
-  char message[] = "123abc";
+
+  char message[] = "In west philadelphia born and raised on the playground is where I spent most of my days. Chillin out maxin relaxin all cool and all shootin some bball outside of the school when a couple of guys who were up to no good started makin trouble in my neighborhood";
   int i;
 
   printf("Original:\n");
   for(i=0; i < strlen(message); i++){
-    printf("%lld\n", (long long)message[i]);
-  }  
-  
+    printf("%c %lld\n", (char)message[i], (long long)message[i]);
+  }
+
   long long *encrypted = rsa_encrypt(message, sizeof(message), pub);
   if (!encrypted){
     fprintf(stderr, "Error in encryption!\n");
@@ -27,9 +27,9 @@ int main(int argc, char **argv)
   }
   printf("Encrypted:\n");
   for(i=0; i < strlen(message); i++){
-    printf("%lld\n", (long long)encrypted[i]);
-  }  
-  
+    printf("%c %lld\n", (char)encrypted[i], (long long)encrypted[i]);
+  }
+
   char *decrypted = rsa_decrypt(encrypted, 8*sizeof(message), priv);
   if (!decrypted){
     fprintf(stderr, "Error in decryption!\n");
@@ -37,9 +37,9 @@ int main(int argc, char **argv)
   }
   printf("Decrypted:\n");
   for(i=0; i < strlen(message); i++){
-    printf("%lld\n", (long long)decrypted[i]);
-  }  
-  
+    printf("%c %lld\n", (char)decrypted[i], (long long)decrypted[i]);
+  }
+
   printf("\n");
   free(encrypted);
   free(decrypted);
