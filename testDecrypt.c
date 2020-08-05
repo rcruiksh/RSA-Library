@@ -7,24 +7,37 @@ int main(int argc, char **argv)
 {
   struct public_key_class pub[1];
   struct private_key_class priv[1];
-  rsa_gen_keys(pub, priv, PRIME_SOURCE_FILE);
+
+  pub->modulus = 834600463;
+  pub->exponent = 257;
+  //private key provided by sender
+  priv->modulus = 834600463;
+  priv->exponent = 172103753;
+
+
 
   printf("Private Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)priv->modulus, (long long) priv->exponent);
   printf("Public Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)pub->modulus, (long long) pub->exponent);
 
-  char message[] = "There And Back Again";
+
+  char message[] = "test decrypt";
+  long long *encrypted = malloc(sizeof(long long)*sizeof(message));
+
+  //encryped data provided by sender
+  encrypted[0] = 29726693;
+  encrypted[1] = 617640602;
+  encrypted[2] = 578074704;
+  encrypted[3] = 29726693;
+  encrypted[4] = 228506422;
+  encrypted[5] = 110329244;
+  encrypted[6] = 617640602;
+  encrypted[7] = 40483209;
+  encrypted[8] = 696941132;
+  encrypted[9] = 540719795;
+  encrypted[10] = 47424872;
+  encrypted[11] = 29726693;
   int i;
 
-  printf("Original:\n");
-  for(i=0; i < strlen(message); i++){
-    printf("%c %lld\n", (char)message[i], (long long)message[i]);
-  }
-
-  long long *encrypted = rsa_encrypt(message, sizeof(message), pub);
-  if (!encrypted){
-    fprintf(stderr, "Error in encryption!\n");
-    return 1;
-  }
   printf("Encrypted:\n");
   for(i=0; i < strlen(message); i++){
     printf("%c %lld\n", (char)encrypted[i], (long long)encrypted[i]);

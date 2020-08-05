@@ -7,12 +7,20 @@ int main(int argc, char **argv)
 {
   struct public_key_class pub[1];
   struct private_key_class priv[1];
-  rsa_gen_keys(pub, priv, PRIME_SOURCE_FILE);
+
+  /*nomrally generated each time, we are using a static key for this benchmark
+    so that power isn't used on key generation making this a fair comparison with
+    the decryption test*/
+  pub->modulus = 834600463;
+  pub->exponent = 257;
+
+  priv->modulus = 834600463;
+  priv->exponent = 172103753;
 
   printf("Private Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)priv->modulus, (long long) priv->exponent);
   printf("Public Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)pub->modulus, (long long) pub->exponent);
 
-  char message[] = "There And Back Again";
+  char message[] = "test decrypt";
   int i;
 
   printf("Original:\n");
@@ -30,18 +38,7 @@ int main(int argc, char **argv)
     printf("%c %lld\n", (char)encrypted[i], (long long)encrypted[i]);
   }
 
-  char *decrypted = rsa_decrypt(encrypted, 8*sizeof(message), priv);
-  if (!decrypted){
-    fprintf(stderr, "Error in decryption!\n");
-    return 1;
-  }
-  printf("Decrypted:\n");
-  for(i=0; i < strlen(message); i++){
-    printf("%c %lld\n", (char)decrypted[i], (long long)decrypted[i]);
-  }
-
   printf("\n");
   free(encrypted);
-  free(decrypted);
   return 0;
 }
